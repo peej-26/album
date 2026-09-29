@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our photo album</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lora:ital,wght@0,400;1,400&display=swap">
+<style>
+:root{
+  --bg:#3a0d16; --bg2:#5c1424; --paper:#fdf7f5; --ink:#3a1620; --accent:#b3273e; --card:#fffaf9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root:not([data-theme="light"]){ color-scheme:dark; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100%; font-family:'Lora',Georgia,serif; color:var(--ink);
+  background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg) 65%); background-color:var(--bg);
+  padding:48px 20px 64px;
+}
+header{max-width:900px; margin:0 auto 34px; text-align:center; position:relative; z-index:1}
+h1{
+  font-family:'Caveat',cursive,sans-serif; font-weight:700; font-size:clamp(2.4rem,7vw,3.4rem);
+  color:#fbe6e6; margin:0 0 6px; line-height:1;
+}
+header p{color:#e9c3c3; margin:0; font-size:1.05rem}
+
+.grid{
+  max-width:1000px; margin:0 auto; display:grid; gap:18px;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+}
+.card{
+  background:var(--card); border-radius:3px; padding:10px 10px 16px; box-shadow:0 14px 30px rgba(0,0,0,.35);
+  cursor:pointer; border:0; text-align:left; font:inherit; color:var(--ink);
+  transform:rotate(var(--tilt,0deg)); transition:transform .25s ease, box-shadow .25s ease;
+}
+.card:nth-child(3n+1){--tilt:-1.2deg}
+.card:nth-child(3n+2){--tilt:0.8deg}
+.card:nth-child(3n){--tilt:-0.4deg}
+.card:hover,.card:focus-visible{transform:rotate(0deg) translateY(-4px); box-shadow:0 18px 34px rgba(0,0,0,.4)}
+.card:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:2px; background:#f1dede}
+.card .cap{font-family:'Caveat',cursive,sans-serif; color:var(--accent); font-size:1.15rem; margin:10px 2px 0; line-height:1.2}
+
+/* lightbox */
+.lightbox{
+  position:fixed; inset:0; background:rgba(20,4,8,.88); display:none; align-items:center; justify-content:center;
+  padding:24px; padding-top:calc(24px + env(safe-area-inset-top,0px)); padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  z-index:10;
+}
+.lightbox.open{display:flex}
+.lightbox figure{margin:0; max-width:min(680px,92vw); text-align:center}
+.lightbox img{max-width:100%; max-height:72vh; border-radius:3px; box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.lightbox figcaption{font-family:'Caveat',cursive,sans-serif; color:#fbe6e6; font-size:1.4rem; margin-top:14px}
+.lb-close,.lb-prev,.lb-next{
+  position:fixed; background:none; border:1px solid rgba(255,255,255,.5); color:#fbe6e6; border-radius:999px;
+  font:inherit; cursor:pointer; display:grid; place-items:center;
+}
+.lb-close{top:calc(18px + env(safe-area-inset-top,0px)); right:18px; width:40px; height:40px; font-size:20px}
+.lb-prev,.lb-next{top:50%; transform:translateY(-50%); width:44px; height:44px; font-size:22px}
+.lb-prev{left:12px}
+.lb-next{right:12px}
+.lb-close:hover,.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.12)}
+.lb-close:focus-visible,.lb-prev:focus-visible,.lb-next:focus-visible{outline:2px solid var(--accent)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Us, in pictures</h1>
+  <p>A few of my favorite moments with you.</p>
+</header>
+
+<!-- ✏️ EDIT YOUR PHOTOS BELOW. Each button is one photo: put the image filename in src (keep the photo in the same folder as this file) and write a short caption. Copy/paste a whole <button class="card">...</button> block to add more. -->
+<div class="grid" id="grid">
+  <button class="card" data-full="photo1.jpg" data-caption="[caption for photo 1]">
+    <img src="photo1.jpg" alt="[describe photo 1]">
+    <p class="cap">[caption for photo 1]</p>
+  </button>
+  <button class="card" data-full="photo2.jpg" data-caption="[caption for photo 2]">
+    <img src="photo2.jpg" alt="[describe photo 2]">
+    <p class="cap">[caption for photo 2]</p>
+  </button>
+  <button class="card" data-full="photo3.jpg" data-caption="[caption for photo 3]">
+    <img src="photo3.jpg" alt="[describe photo 3]">
+    <p class="cap">[caption for photo 3]</p>
+  </button>
+  <button class="card" data-full="photo4.jpg" data-caption="[caption for photo 4]">
+    <img src="photo4.jpg" alt="[describe photo 4]">
+    <p class="cap">[caption for photo 4]</p>
+  </button>
+  <button class="card" data-full="photo5.jpg" data-caption="[caption for photo 5]">
+    <img src="photo5.jpg" alt="[describe photo 5]">
+    <p class="cap">[caption for photo 5]</p>
+  </button>
+  <button class="card" data-full="photo6.jpg" data-caption="[caption for photo 6]">
+    <img src="photo6.jpg" alt="[describe photo 6]">
+    <p class="cap">[caption for photo 6]</p>
+  </button>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
+  <figure>
+    <img id="lbImg" src="" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-next" id="lbNext" aria-label="Next photo">›</button>
+</div>
+
+<script>
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  var current = 0;
+
+  function show(i) {
+    current = (i + cards.length) % cards.length;
+    var c = cards[current];
+    lbImg.src = c.getAttribute('data-full');
+    lbImg.alt = c.querySelector('img').alt;
+    lbCap.textContent = c.getAttribute('data-caption');
+    lightbox.classList.add('open');
+  }
+  cards.forEach(function (c, i) {
+    c.addEventListener('click', function () { show(i); });
+  });
+  document.getElementById('lbClose').addEventListener('click', function () { lightbox.classList.remove('open'); });
+  document.getElementById('lbPrev').addEventListener('click', function () { show(current - 1); });
+  document.getElementById('lbNext').addEventListener('click', function () { show(current + 1); });
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) lightbox.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') lightbox.classList.remove('open');
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+</script>
+</body>
+</html>
